@@ -74,9 +74,15 @@ var _MobileMenu = __webpack_require__(1);
 
 var _MobileMenu2 = _interopRequireDefault(_MobileMenu);
 
+var _RevealOnScroll = __webpack_require__(2);
+
+var _RevealOnScroll2 = _interopRequireDefault(_RevealOnScroll);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mobileMenu = new _MobileMenu2.default();
+new _RevealOnScroll2.default('.feature-item', 85);
+new _RevealOnScroll2.default('.testimonial', 60);
 
 /***/ }),
 /* 1 */
@@ -121,6 +127,65 @@ var MobileMenu = function () {
 }();
 
 exports.default = MobileMenu;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var RevealOnScroll = function () {
+  function RevealOnScroll(selector, offset) {
+    _classCallCheck(this, RevealOnScroll);
+
+    this.itemsToReveal = document.querySelectorAll(selector);
+    this.heightOfScreen = document.documentElement.clientHeight;
+    this.offset = offset;
+    this.hideInitially();
+    this.showInitially();
+  }
+
+  _createClass(RevealOnScroll, [{
+    key: 'hideInitially',
+    value: function hideInitially() {
+      this.itemsToReveal.forEach(function (el) {
+        return el.classList.add('reveal-item');
+      });
+    }
+  }, {
+    key: 'showInitially',
+    value: function showInitially() {
+      var _this = this;
+
+      document.addEventListener('scroll', function () {
+        _this.itemsToReveal.forEach(function (el) {
+          var box = el.getBoundingClientRect();
+          if (_this.heightOfScreen - box.top > box.height * _this.offset / 100) {
+            el.classList.add('reveal-item--is-visible');
+          } else if (_this.heightOfScreen - box.top < box.height * _this.offset / 100) {
+            el.classList.remove('reveal-item--is-visible');
+          }
+        });
+      }, {
+        capture: true,
+        passive: true
+      });
+    }
+  }]);
+
+  return RevealOnScroll;
+}();
+
+exports.default = RevealOnScroll;
 
 /***/ })
 /******/ ]);
