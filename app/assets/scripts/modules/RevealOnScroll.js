@@ -1,37 +1,30 @@
+import $ from 'jquery';
+import waypoints from '../../../../node_modules/waypoints/lib/noframework.waypoints';
+
 class RevealOnScroll {
-  constructor(selector, offset) {
-    this.itemsToReveal = document.querySelectorAll(selector);
-    this.heightOfScreen = document.documentElement.clientHeight;
-    this.offset = offset;
+  constructor(els, offset) {
+    this.itemsToReveal = els;
+    this.offsetPercentage = offset;
     this.hideInitially();
-    this.showInitially();
+    this.createWaypoints();
   }
 
   hideInitially() {
-    this.itemsToReveal.forEach(el => el.classList.add('reveal-item'));
+    this.itemsToReveal.addClass('reveal-item');
   }
 
-  showInitially() {
-    document.addEventListener(
-      'scroll',
-      () => {
-        this.itemsToReveal.forEach(el => {
-          let box = el.getBoundingClientRect();
-          if (this.heightOfScreen - box.top > box.height * this.offset / 100) {
-            el.classList.add('reveal-item--is-visible');
-          } else if (
-            this.heightOfScreen - box.top <
-            box.height * this.offset / 100
-          ) {
-            el.classList.remove('reveal-item--is-visible');
-          }
-        });
-      },
-      {
-        capture: true,
-        passive: true,
-      },
-    );
+  createWaypoints() {
+    const that = this;
+    this.itemsToReveal.each(function() {
+      const currentItem = this;
+      new Waypoint({
+        element: currentItem,
+        handler: function() {
+          $(currentItem).addClass('reveal-item--is-visible');
+        },
+        offset: that.offsetPercentage,
+      });
+    });
   }
 }
 
